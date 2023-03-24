@@ -9,4 +9,8 @@ class Unit extends Model
 {
     use HasFactory;
     protected $guarded=[];
+    public function amenities()
+    {
+        return $this->belongsToMany(Amenity::class, 'units_amenities', 'units_id', 'amenities_id');
+    }
 }

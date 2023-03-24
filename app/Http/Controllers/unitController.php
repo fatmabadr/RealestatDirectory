@@ -3,25 +3,40 @@
 namespace App\Http\Controllers;
 use App\Models\Unit;
 use Illuminate\Http\Request;
+use App\Models\Amenity;
+use App\Models\Unit_multiImages;
+
 
 class unitController extends Controller
 {
 
-    public function ViewAll(){
+public function ViewAll(){
         $units=Unit::latest()->get();
         return view('units.view',compact('units'));
 }
 
 
 public function creare(){
-    return view('units.create');
+   $aminities= Amenity::latest()->get();
+    return view('units.create',compact('aminities'));
 }
 
 
 
 public function Save(Request $request){
+//return $request;
 
-    Unit::insert([
+    if ($request->file('unit_main_photo')){
+        $file = $request->file('unit_main_photo');
+        $fileName = date('YmdHi').$file->getClientOriginalName();
+        $file->move(public_path('unitImages'),$fileName);
+    }
+    else{$fileName='';}
+
+
+
+
+    $unit=Unit::insertGetId([
         'name'=>$request->name ,
         'area'=>$request->area ,
         'details'=>$request->details ,
@@ -32,17 +47,50 @@ public function Save(Request $request){
         'type'=>$request->type ,
         'googleMapsLocation_url'=>$request->googleMapsLocation_url ,
         'user_id'=>7 ,
+        'mainimage'=>$fileName
                  ]);
+
+    foreach ($request->aminity as $aminity){
+        $unit = Unit::findOrFail($unit);
+        $unit->amenities()->attach($aminity);
+    }
+
+
+//mulltiImages
+
+if ($request->file('multi_img')){
+    $images=$request->file('multi_img');
+    foreach($images as $image){
+         $fileName=date('YmdHp').$image->getClientOriginalName();
+         $image->move(public_path('unitImages'),$fileName);
+         Unit_multiImages::insert([
+            'image_name'=>$fileName,
+             'unit_id'=>$unit->id ,
+
+         ]);
+     }}
+
     $units=Unit::latest()->get();
     return view('units.view',compact('units'));}
 
 
 public function edite($id){
-    $unit=Unit::find($id);
-   return view('units.edite',compact('unit'));}
+        $unit=Unit::find($id);
+        $aminities= Amenity::latest()->get();
+        $Unit_multiImages=Unit_multiImages::where('unit_id',$id)->get();
+
+        return view('units.edite',compact('unit','aminities','Unit_multiImages'));}
 
 
 public function update(Request $request){
+
+    if ($request->file('unit_main_photo')){
+        $file = $request->file('unit_main_photo');
+        $fileName = date('YmdHi').$file->getClientOriginalName();
+        $file->move(public_path('unitImages'),$fileName);
+    }
+    else{$fileName='';}
+
         $unit=Unit::find($request->id);
         $unit->name=$request->name;
         $unit->area=$request->area;
@@ -53,7 +101,27 @@ public function update(Request $request){
         $unit->delevery_date=$request->delevery_date;
         $unit->building_date=$request->building_date;
         $unit->googleMapsLocation_url=$request->googleMapsLocation_url;
+        $unit->mainimage =$fileName;
         $unit->save();
+
+        foreach ($request->aminity as $aminity){
+            $unit = Unit::findOrFail($request->id);
+            $unit->amenities()->attach($aminity);
+        }
+
+if ($request->file('multi_img')){
+
+    $images=$request->file('multi_img');
+    foreach($images as $image){
+         $fileName=date('YmdHp').$image->getClientOriginalName();
+         $image->move(public_path('unitImages'),$fileName);
+         Unit_multiImages::insert([
+            'image_name'=>$fileName,
+             'unit_id'=>$unit->id ,
+
+         ]);
+     }}
+
         $units=Unit::latest()->get();
         return view('units.view',compact('units'));}
 
@@ -66,4 +134,13 @@ public function delete($id){
 }
 
 
+public function deleteMultipleImages($id){
+    Unit_multiImages::destroy($id);
+    return redirect()->back();
 }
+
+
+}
+
+
+

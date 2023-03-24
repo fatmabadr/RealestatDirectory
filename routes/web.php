@@ -38,5 +38,10 @@ route::prefix('units')->group(function(){
     route::get('edit/{id}',[unitController::class,'edite'])->name('unit.edite');
     route::post('Unit/update',[unitController::class,'update'])->name('unit.update');
     route::get('delete/{id}',[unitController::class,'delete'])->name('unit.delete');
+    route::get('add/amenity/{id}',[unitController::class,'addAmenities'])->name('unit.add.amenity');
+    route::post('multiImagesofUnit/save',[unitController::class,'updateMultipleImages'])->name('unit.multiImages.update');
+    route::get('multiImagesofUnit/delete/{id}',[unitController::class,'deleteMultipleImages'])->name('unit.image.delete');
+
 
 });
+
