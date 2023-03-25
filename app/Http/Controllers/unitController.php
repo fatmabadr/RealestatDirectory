@@ -5,16 +5,21 @@ use App\Models\Unit;
 use Illuminate\Http\Request;
 use App\Models\Amenity;
 use App\Models\Unit_multiImages;
-
+use App\Models\ContactUs;
 
 class unitController extends Controller
 {
 
 public function ViewAll(){
         $units=Unit::latest()->get();
-        return view('units.view',compact('units'));
+        return view('units.viewAll',compact('units'));
 }
 
+public function ViewUnit($id){
+    $unit=Unit::find($id);
+    $multiImages=Unit_multiImages::where('unit_id',$id)->get();
+    return view('units.view',compact('unit','multiImages'));
+}
 
 public function creare(){
    $aminities= Amenity::latest()->get();
@@ -71,7 +76,7 @@ if ($request->file('multi_img')){
      }}
 
     $units=Unit::latest()->get();
-    return view('units.view',compact('units'));}
+    return view('units.viewAll',compact('units'));}
 
 
 public function edite($id){
@@ -123,14 +128,14 @@ if ($request->file('multi_img')){
      }}
 
         $units=Unit::latest()->get();
-        return view('units.view',compact('units'));}
+        return view('units.viewAll',compact('units'));}
 
 
 public function delete($id){
     $unit=Unit::find($id);
     $unit->delete();
     $units=Unit::latest()->get();
-    return view('units.view',compact('units'));
+    return view('units.viewAll',compact('units'));
 }
 
 
@@ -138,7 +143,24 @@ public function deleteMultipleImages($id){
     Unit_multiImages::destroy($id);
     return redirect()->back();
 }
+public function saveMessage(Request $request){
+    ContactUs::insert([
+        'user_id'=>6,
+        'unit_id'=>$request->unit_id,
+        'name'=>$request->name,
+        'messageDetails'=>$request->messageDetails,
+        'phone'=>$request->phone
+    ]);
+}
+public function myUnits($id){
+    $units=Unit::where('user_id',$id)->get();
+    return view('units.viewAll',compact('units'));
+}
+public function mymessages($id){
 
+    $messages=ContactUs::where('user_id',$id)->get();
+    return view('messages',compact('messages'));
+}
 
 }
 

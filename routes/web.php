@@ -33,6 +33,7 @@ require __DIR__.'/auth.php';
 
 route::prefix('units')->group(function(){
     route::get('view/all',[unitController::class,'ViewAll'])->name('MyUnits.view');
+    route::get('view/unit/{id}',[unitController::class,'ViewUnit'])->name('Unit.view');
     route::get('creare',[unitController::class,'creare'])->name('add.new.unit');
     route::post('newUnit/save',[unitController::class,'save'])->name('unit.save');
     route::get('edit/{id}',[unitController::class,'edite'])->name('unit.edite');
@@ -41,6 +42,11 @@ route::prefix('units')->group(function(){
     route::get('add/amenity/{id}',[unitController::class,'addAmenities'])->name('unit.add.amenity');
     route::post('multiImagesofUnit/save',[unitController::class,'updateMultipleImages'])->name('unit.multiImages.update');
     route::get('multiImagesofUnit/delete/{id}',[unitController::class,'deleteMultipleImages'])->name('unit.image.delete');
+
+    route::post('message/save',[unitController::class,'saveMessage'])->name('masseges.save');
+    route::get('myUnits/{id}',[unitController::class,'myUnits'])->name('my.units');
+    route::get('mymessage/{id}',[unitController::class,'mymessages'])->name('my.messages');
+
 
 
 });
