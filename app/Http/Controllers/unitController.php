@@ -1,27 +1,38 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\DB;
 use App\Models\Unit;
 use Illuminate\Http\Request;
 use App\Models\Amenity;
 use App\Models\Unit_multiImages;
 use App\Models\ContactUs;
-
+use Auth;
 class unitController extends Controller
 {
 
+
 public function ViewAll(){
+        $minprice=Unit::whereNotNull('price')->min('price');
+        $maxprice=Unit::whereNotNull('price')->max('price');
+        $minArea=Unit::whereNotNull('area')->min('area');
+        $maxArea=Unit::whereNotNull('area')->max('area');
+
         $units=Unit::latest()->get();
-        return view('units.viewAll',compact('units'));
+        $types=Unit::DISTINCT()->get('type');
+
+        return view('units.viewAll',compact('units','types','minprice','maxprice','minArea','maxArea'));
 }
 
 public function ViewUnit($id){
     $unit=Unit::find($id);
     $multiImages=Unit_multiImages::where('unit_id',$id)->get();
-    return view('units.view',compact('unit','multiImages'));
+    $views= Redis::incr('unit'.$id);
+    return view('units.view',compact('unit','multiImages','views'));
 }
 
-public function creare(){
+public function create(){
    $aminities= Amenity::latest()->get();
     return view('units.create',compact('aminities'));
 }
@@ -29,8 +40,6 @@ public function creare(){
 
 
 public function Save(Request $request){
-//return $request;
-
     if ($request->file('unit_main_photo')){
         $file = $request->file('unit_main_photo');
         $fileName = date('YmdHi').$file->getClientOriginalName();
@@ -39,6 +48,10 @@ public function Save(Request $request){
     else{$fileName='';}
 
 
+
+if(Auth::user()){
+    $user_id=Auth::user()->id;}
+    else{$user_id=0;}
 
 
     $unit=Unit::insertGetId([
@@ -51,12 +64,13 @@ public function Save(Request $request){
         'delevery_date'=>$request->delevery_date ,
         'type'=>$request->type ,
         'googleMapsLocation_url'=>$request->googleMapsLocation_url ,
-        'user_id'=>7 ,
+        'user_id'=>$user_id,
         'mainimage'=>$fileName
                  ]);
 
-    foreach ($request->aminity as $aminity){
+
         $unit = Unit::findOrFail($unit);
+        foreach ($request->aminity as $aminity){
         $unit->amenities()->attach($aminity);
     }
 
@@ -75,8 +89,15 @@ if ($request->file('multi_img')){
          ]);
      }}
 
+
+    $minprice=Unit::whereNotNull('price')->min('price');
+    $maxprice=Unit::whereNotNull('price')->max('price');
+    $minArea=Unit::whereNotNull('area')->min('area');
+    $maxArea=Unit::whereNotNull('area')->max('area');
     $units=Unit::latest()->get();
-    return view('units.viewAll',compact('units'));}
+    $types=Unit::DISTINCT()->get('type');
+    return view('units.viewAll',compact('units','types','minprice','maxprice','minArea','maxArea'));
+}
 
 
 public function edite($id){
@@ -128,14 +149,26 @@ if ($request->file('multi_img')){
      }}
 
         $units=Unit::latest()->get();
-        return view('units.viewAll',compact('units'));}
+        $types=Unit::DISTINCT()->get('type');
+        $minprice=Unit::whereNotNull('price')->min('price');
+    $maxprice=Unit::whereNotNull('price')->max('price');
+    $minArea=Unit::whereNotNull('area')->min('area');
+    $maxArea=Unit::whereNotNull('area')->max('area');
+        return view('units.viewAll',compact('units','types','minprice','maxprice','minArea','maxArea'));
+    }
 
 
 public function delete($id){
     $unit=Unit::find($id);
     $unit->delete();
     $units=Unit::latest()->get();
-    return view('units.viewAll',compact('units'));
+    $minprice=Unit::whereNotNull('price')->min('price');
+    $maxprice=Unit::whereNotNull('price')->max('price');
+    $minArea=Unit::whereNotNull('area')->min('area');
+    $maxArea=Unit::whereNotNull('area')->max('area');
+    $types=Unit::DISTINCT()->get('type');
+    return view('units.viewAll',compact('units','types','minprice','maxprice','minArea','maxArea'));
+
 }
 
 
@@ -154,15 +187,40 @@ public function saveMessage(Request $request){
 }
 public function myUnits($id){
     $units=Unit::where('user_id',$id)->get();
-    return view('units.viewAll',compact('units'));
-}
-public function mymessages($id){
+    $minprice=Unit::whereNotNull('price')->min('price');
+    $maxprice=Unit::whereNotNull('price')->max('price');
+    $minArea=Unit::whereNotNull('area')->min('area');
+    $maxArea=Unit::whereNotNull('area')->max('area');
+    $types=Unit::DISTINCT()->get('type');
+    return view('units.viewAll',compact('units','types','minprice','maxprice','minArea','maxArea'));
 
+}
+
+public function mymessages($id){
     $messages=ContactUs::where('user_id',$id)->get();
     return view('messages',compact('messages'));
 }
 
+public function search(Request $request){
+    if($request->type != null){
+         $units = DB::table('units')->whereBetween('area', [$request->minArea, $request->maxArea])->
+                                      whereBetween('price', [$request->minPrice, $request->maxPrice])->
+                                      wherein('type',$request->type)->get();
+                              }
+    else {
+    $units = DB::table('units')->whereBetween('area', [$request->minArea, $request->maxArea])->
+                                 whereBetween('price', [$request->minPrice, $request->maxPrice])->get();
+        }
+    $types=Unit::DISTINCT()->get('type');
+    $minprice=Unit::whereNotNull('price')->min('price');
+    $maxprice=Unit::whereNotNull('price')->max('price');
+    $minArea=Unit::whereNotNull('area')->min('area');
+    $maxArea=Unit::whereNotNull('area')->max('area');
+
+    return view('units.viewAll',compact('units','types','minprice','maxprice','minArea','maxArea'));
+
 }
 
 
+}
 

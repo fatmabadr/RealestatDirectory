@@ -2,7 +2,15 @@
 {{$multiImages}}
 
 
+@if (Auth::user())->id==$unit-.user_id())
 
+
+
+
+number of visitors {{$views}}
+
+
+@else
 Contact us
 
 <form action="{{route('masseges.save')}}" method="POST">
@@ -21,3 +29,4 @@ Contact us
   <input type="submit" class="btn btn-rounded btn-primary mb-5" value="send message">
 
 </form>
+@endif

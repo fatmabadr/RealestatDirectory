@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <style>
@@ -8,6 +9,36 @@ table, th, td {
 <body>
 
 <h2>units table</h2>
+
+<h3>search </h3><br>
+ area
+<form action="{{route('search.area')}}" method="POST"  >
+    @csrf
+     min      <input type="number" name="minArea" id="minArea" min="{{$minArea}}" value="{{$minArea}}"> <br>
+     max      <input type="number" name="maxArea"  value="{{$maxArea}}" > <br>
+<br><br>
+
+
+ price
+<br>
+     min      <input type="number" name="minPrice" id="minPrice" min="0" value="{{$minprice}}"> <br>
+     max      <input type="number" name="maxPrice"value="{{$maxprice}}" > <br>
+<br><br>
+
+<h1>search  type</h1>
+@foreach ($types as $type )
+<input type="checkbox"  name="type[]" value={{$type->type}}>
+<label  name="type[]" > {{$type->type}}</label><br>
+@endforeach
+
+
+     <input type="submit" class="btn btn-rounded btn-primary mb-5" value="search">
+
+
+
+
+
+
 
 <table style="width:100%">
   <tr>
@@ -30,7 +61,8 @@ table, th, td {
 </table>
 <a href="{{route('add.new.unit')}}">add new unit</a>
 
+
+
+
 </body>
 </html>
-
-
