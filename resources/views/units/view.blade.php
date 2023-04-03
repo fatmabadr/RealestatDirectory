@@ -13,7 +13,7 @@ number of visitors {{$views}}
 @else
 Contact us
 
-<form action="{{route('masseges.save')}}" method="POST">
+<form action="{{route('massege.save')}}" method="POST">
     @csrf
 
 

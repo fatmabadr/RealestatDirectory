@@ -12,7 +12,7 @@ table, th, td {
 
 <h3>search </h3><br>
  area
-<form action="{{route('search.area')}}" method="POST"  >
+<form action="{{route('units.search')}}" method="POST"  >
     @csrf
      min      <input type="number" name="minArea" id="minArea" min="{{$minArea}}" value="{{$minArea}}"> <br>
      max      <input type="number" name="maxArea"  value="{{$maxArea}}" > <br>
@@ -45,8 +45,9 @@ table, th, td {
     <th>Nmae</th>
     <th>Area</th>
     <th>Price</th>
-    <th>Image</th>
+    <th>Main Image</th>
     <th>Action</th>
+    <th>views</th>
   </tr>
   @foreach($units as $unit)
   <tr>
@@ -54,12 +55,16 @@ table, th, td {
     <td>{{$unit->area}}</td>
     <td>{{$unit->price}} </td>
     <td><img width="30" height="30" src="/unitImages/{{$unit->mainimage}}" > </td>
-    <td> <a  href="{{route('unit.delete',$unit->id)}}">delete</a> <a  href="{{route('unit.edite',$unit->id)}}">edite </a></td>
+    <td> @if(Auth::user())<a  href="{{route('unit.delete',$unit->id)}}">delete</a> <a  href="{{route('unit.edite',$unit->id)}}">edite </a>@endif    </td>
+
+        <td>  {{Illuminate\Support\Facades\Redis::get('unit'.$unit->id)}}     </td>
+
+
 
 </tr>
  @endforeach
 </table>
-<a href="{{route('add.new.unit')}}">add new unit</a>
+<a href="{{route('create.new.unit')}}">add new unit</a>
 
 
 
