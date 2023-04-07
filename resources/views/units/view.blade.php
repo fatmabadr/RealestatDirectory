@@ -2,7 +2,7 @@
 {{$multiImages}}
 
 
-@if (Auth::user())->id==$unit-.user_id())
+@if(Auth::user()->id== $unit->user_id)
 
 
 
@@ -11,6 +11,7 @@ number of visitors {{$views}}
 
 
 @else
+<br><br><br><br>
 Contact us
 
 <form action="{{route('massege.save')}}" method="POST">

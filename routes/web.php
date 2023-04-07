@@ -16,10 +16,10 @@ use App\http\Controllers\unitController;
 |
 */
 
-Route::get('/', function () {
-  //  return  Redis::incr('visits');
-    return view('units.cate');
-});
+
+    route::get('/',[unitController::class,'ViewAll'])->name('Units.view.all');
+
+
 
 
 
@@ -51,6 +51,7 @@ route::prefix('units')->group(function(){
     route::post('message/save',[unitController::class,'saveMessage'])->name('massege.save');
     route::get('mymessage/{id}',[unitController::class,'MyMessages'])->name('my.messages');
     route::post('search/',[unitController::class,'search'])->name('units.search');
+    route::post('Sortby/',[unitController::class,'Sortby'])->name('units.Sort');
 
 
 

@@ -6,10 +6,15 @@ table, th, td {
   border:1px solid black;
 }
 </style>
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+</head>
 <body>
 
 <h2>units table</h2>
-
+<div class="row">
+    <div class = "col-md-6">
 <h3>search </h3><br>
  area
 <form action="{{route('units.search')}}" method="POST"  >
@@ -34,7 +39,43 @@ table, th, td {
 
      <input type="submit" class="btn btn-rounded btn-primary mb-5" value="search">
 
+</form>
+</div>
 
+
+<div class = "col-md-6">
+
+sort By :
+<form action="{{route('units.Sort')}}" method="POST"  >
+@csrf
+<div class="form-check">
+    <input class="form-check-input" type="radio" name="Sort" id="Sort" value="pricelow" checked >
+    <label class="form-check-label" for="Sort">
+        price from low to high
+    </label><br>
+
+    <input class="form-check-input" type="radio" name="Sort" id="Sort" value="priceHigh" >
+    <label class="form-check-label" for="Sort">
+        price from high to low
+    </label><br>
+
+    <input class="form-check-input" type="radio" name="Sort" id="Sort" value="areaLarge" >
+    <label class="form-check-label" for="Sort">
+        area from large to small
+    </label><br>
+    <input class="form-check-input" type="radio" name="Sort" id="Sort" value="areaSmall" >
+    <label class="form-check-label" for="Sort">
+        area from small to large
+    </label>
+
+  </div>
+  <input type="submit" class="btn btn-rounded btn-primary mb-5" value="Sort">
+
+
+
+
+</div>
+</div>
 
 
 

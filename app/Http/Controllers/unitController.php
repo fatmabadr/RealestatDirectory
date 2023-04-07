@@ -226,6 +226,31 @@ public function search(Request $request){
 
 }
 
+public function Sortby(Request $request){
+    if($request->Sort=='priceHigh'){
+        $units=Unit::all()->sortByDesc("price");
+    }
+    if($request->Sort=='pricelow'){
+        $units=Unit::all()->sortBy("price");
+    }
+    if($request->Sort=='areaLarge'){
+        $units=Unit::all()->sortByDesc("area");
+    }
 
+    if($request->Sort=='areasmall'){
+        $units=Unit::all()->sortBy("area");
+    }
+//
+
+    $minprice=Unit::whereNotNull('price')->min('price');
+    $maxprice=Unit::whereNotNull('price')->max('price');
+    $minArea=Unit::whereNotNull('area')->min('area');
+    $maxArea=Unit::whereNotNull('area')->max('area');
+    $types=Unit::DISTINCT()->get('type');
+    return view('units.viewAll',compact('units','types','minprice','maxprice','minArea','maxArea'));
 }
+}
+
+
+
 
