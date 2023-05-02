@@ -23,6 +23,8 @@ return new class extends Migration
             $table->string('googleMapsLocation_url');
             $table->string('type');
             $table->integer('user_id');
+            $table->integer('noofbedrooms');
+            $table->integer('bathrooms');
             $table->timestamps();
         });
     }

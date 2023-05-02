@@ -17,8 +17,10 @@ use App\http\Controllers\unitController;
 */
 
 
-    route::get('/',[unitController::class,'ViewAll'])->name('Units.view.all');
+    route::get('/hi',[unitController::class,'ViewAll'])->name('Units.view.all');
 
+    Route::get('/', function () {
+        return view('Home');});
 
 
 
@@ -37,6 +39,8 @@ Route::middleware('auth')->group(function () {
 require __DIR__.'/auth.php';
 
 route::prefix('units')->group(function(){
+    route::get('home',[unitController::class,'home'])->name('unit.home.page');
+
     route::get('view/all',[unitController::class,'ViewAll'])->name('Units.view.all');
     route::get('view/unit/{id}',[unitController::class,'ViewUnit'])->name('Unit.view');
     route::get('view/myUnits/{id}',[unitController::class,'myUnits'])->name('my.units');
@@ -52,7 +56,7 @@ route::prefix('units')->group(function(){
     route::get('mymessage/{id}',[unitController::class,'MyMessages'])->name('my.messages');
     route::post('search/',[unitController::class,'search'])->name('units.search');
     route::post('Sortby/',[unitController::class,'Sortby'])->name('units.Sort');
-
+    route::post('searcrrh/',[unitController::class,'searchArea'])->name('units.search.area');
 
 
 

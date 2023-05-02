@@ -13,6 +13,8 @@
                                           <input type="hidden" name="user_id" value="">
                            unit name      <input type="text" name="name" > <br>
                            unit area      <input type="text" name="area" > <br>
+                           noofbedrooms     <input type="number" name="noofbedrooms" > <br>
+                           noofbathrooms      <input type="number" name="noofbathrooms" > <br>
                            unit price      <input type="text" name="price" > <br>
                            unit googleMapsLocation_url      <input type="text" name="googleMapsLocation_url" > <br>
                            unit type      <input type="text" name="type" > <br>
