@@ -50,7 +50,7 @@
                       <a href="properties.html">Properties</a>
                       <ul class="dropdown">
                         <li><a href="#">Buy Property</a></li>
-                        <li><a href="#">Sell Property</a></li>
+                        <li><a href="{{route('unit.create')}}">Sell Property</a></li>
                         <li class="has-children">
                           <a href="#">Dropdown</a>
                           <ul class="dropdown">
@@ -61,9 +61,16 @@
                         </li>
                       </ul>
                     </li>
+
                     <li><a href="services.html">Services</a></li>
                     <li><a href="about.html">About</a></li>
                     <li><a href="contact.html">Contact Us</a></li>
+                    @if (!Auth::user())
+                    <li><a href="{{route('login')}}">Login</a></li>
+                    @else
+                    <li><a href="{{route('profile.edit')}}">Profile</a></li>
+                    <li><a href="{{route('logout')}}">Logout</a></li>
+                     @endif
                   </ul>
 
                   <a

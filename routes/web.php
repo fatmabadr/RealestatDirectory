@@ -4,6 +4,9 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Redis;
 use App\http\Controllers\unitController;
+use App\http\Controllers\AreaController;
+use App\http\Controllers\UserController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,8 +22,7 @@ use App\http\Controllers\unitController;
 
     route::get('/hi',[unitController::class,'ViewAll'])->name('Units.view.all');
 
-    Route::get('/', function () {
-        return view('Home');});
+    Route::get('/', [unitController::class,'home']);
 
 
 
@@ -40,12 +42,10 @@ require __DIR__.'/auth.php';
 
 route::prefix('units')->group(function(){
     route::get('home',[unitController::class,'home'])->name('unit.home.page');
-
     route::get('view/all',[unitController::class,'ViewAll'])->name('Units.view.all');
     route::get('view/unit/{id}',[unitController::class,'ViewUnit'])->name('Unit.view');
     route::get('view/myUnits/{id}',[unitController::class,'myUnits'])->name('my.units');
-    route::get('create',[unitController::class,'create'])->name('create.new.unit');
-    route::post('save',[unitController::class,'save'])->name('unit.save');
+    route::post('view/all',[unitController::class,'save'])->name('unit.save');
     route::get('edite/{id}',[unitController::class,'edite'])->name('unit.edite');
     route::post('update',[unitController::class,'update'])->name('unit.update');
     route::get('delete/{id}',[unitController::class,'delete'])->name('unit.delete');
@@ -57,8 +57,25 @@ route::prefix('units')->group(function(){
     route::post('search/',[unitController::class,'search'])->name('units.search');
     route::post('Sortby/',[unitController::class,'Sortby'])->name('units.Sort');
     route::post('searcrrh/',[unitController::class,'searchArea'])->name('units.search.area');
+//
+
+        route::get('create',[unitController::class,'create'])->name('unit.create')->middleware(['auth']);
+
+
+
 
 
 
 });
 
+
+
+route::get('/getAllCities/Governorate/{governorate_id}', [AreaController::class,'getallcitiesofgoveronrate']);
+route::get('/getAlldistrict/district/{city_id}', [AreaController::class,'getalldistrictofcity']);
+
+
+Route::get('login', [AuthenticatedSessionController::class, 'create'])->name('login');
+Route::get('logout', [AuthenticatedSessionController::class, 'destroy'])
+->name('logout');
+route::get('profile',[ProfileController::class,'edit'])->name('profile.edit');
+Route::get('delete/', [ProfileController::class, 'deleteProfileImage'])->name('delete.profile.image');

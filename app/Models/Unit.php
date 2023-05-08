@@ -13,4 +13,11 @@ class Unit extends Model
     {
         return $this->belongsToMany(Amenity::class, 'units_amenities', 'units_id', 'amenities_id');
     }
-}
+
+    public function district()
+    {
+
+            return $this->belongsTo(District::class, 'district_id', 'id');
+        }
+    }
+

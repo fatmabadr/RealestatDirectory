@@ -73,7 +73,7 @@ style="background-image: url('/unitImages/{{$unit->mainimage}}')"
     </div>
     <div class="col-lg-4">
       <h2 class="heading text-primary">  {{$unit->name}}</h2>
-      <p class="meta">California, United States </p>
+      <p class="meta">{{$unit->district->name}}, {{$unit->district->City->name}} ,{{$unit->district->Governorate->name}} </p>
       <p class="text-black-50">
 
         {{$unit->details}}

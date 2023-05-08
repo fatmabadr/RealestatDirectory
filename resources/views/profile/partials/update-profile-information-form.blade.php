@@ -1,3 +1,5 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
 <section>
     <header>
         <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
@@ -13,7 +15,7 @@
         @csrf
     </form>
 
-    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6">
+    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6"enctype="multipart/form-data">
         @csrf
         @method('patch')
 
@@ -21,9 +23,10 @@
             <x-input-label for="name" :value="__('Name')" />
             <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)" required autofocus autocomplete="name" />
             <x-input-error class="mt-2" :messages="$errors->get('name')" />
-        </div>
 
-        <div>
+
+
+
             <x-input-label for="email" :value="__('Email')" />
             <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email', $user->email)" required autocomplete="username" />
             <x-input-error class="mt-2" :messages="$errors->get('email')" />
@@ -47,6 +50,46 @@
             @endif
         </div>
 
+{{-- // --}}
+
+
+
+
+ <div class="row mb-3">
+     <label for="example-text-input" class="col-sm-2 col-form-label">Profile image</label>
+
+     <div class="row mb-3">
+         <input class="form-control" name="profileImage" type="file"  id="image">
+         <label  class="col-sm-2 col-form-label"></label>
+         <div class="col-sm-10">
+         <img id ="showImage" alt="avatar-5" class ="card-img-top" style="border-radius:50% "
+
+         src ="profileImages/{{!empty($user->profileImage)?$user->profileImage :'defultprofileImage.jpg'}}" height ="20%" width="15%" >
+ </div>
+  </div>
+
+
+ <div class="row mb-3">
+
+
+     @if(!empty ($user->profileImage))
+     <a href="{{route('delete.profile.image')}}" type="button" class="btn btn-success mb-5">Delete Image</a>
+
+     @endif
+
+     </div>
+
+
+ </div>
+
+
+
+
+ brif Info  <textarea  name="briefInfo" rows="5" cols="15" value=""> </textarea>
+
+
+{{-- // --}}
+
         <div class="flex items-center gap-4">
             <x-primary-button>{{ __('Save') }}</x-primary-button>
 
@@ -62,3 +105,24 @@
         </div>
     </form>
 </section>
+
+
+
+
+
+<script type="text/javascript">
+
+    $(document).ready(function(){
+
+    $('#image').change(function(e){
+    var reader = new FileReader();
+    reader.onload = function(e){
+        $('#showImage').attr('src',e.target.result);
+    }
+    reader.readAsDataURL(e.target.files['0']);
+    });
+
+    });
+
+
+        </script>

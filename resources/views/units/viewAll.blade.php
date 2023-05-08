@@ -53,7 +53,7 @@ style="background-image: url('/frontend/assets/images/hero_bg_1.jpg')"
                 <span class="d-block mb-2 text-black-50"
                   >{{$unit->name}}</span
                 >
-                <span class="city d-block mb-3">California, USA</span>
+                <span class="city d-block mb-3">{{$unit->district->name}}, {{$unit->district->Governorate->name}}</span>
 
                 <div class="specs d-flex mb-4">
                   <span class="d-block d-flex align-items-center me-3">

@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\mail;
 use App\Models\Unit;
 use Illuminate\Http\Request;
 use App\Models\Amenity;
+use App\Models\District;
+use App\Models\Governorate;
+use App\Models\City;
 use App\Models\Unit_multiImages;
 use App\Models\ContactUs;
 use Auth;
@@ -25,7 +28,10 @@ public function ViewAll(){
         $minimumArea=Unit::whereNotNull('area')->min('area');
         $maximumArea=Unit::whereNotNull('area')->max('area');
         $units=Unit::latest()->paginate(10);
+       // $unitsdistrict=District::where('district_id',$units->$id)->get('name');
+
         $types=Unit::DISTINCT()->get('type');
+
         return view('units.viewAll',compact('units','types','minimumprice','maximumprice','minimumArea','maximumArea'));
 }
 
@@ -34,18 +40,26 @@ public function ViewUnit($id){
     $unit=Unit::find($id);
     $multiImages=Unit_multiImages::where('unit_id',$id)->get();
     $views= Redis::incr('unit'.$id);
+
     return view('units.view',compact('unit','multiImages','views'));
 }
 
 
 public function create(){
+    if(Auth::user()->userType==0){
+     Auth::logout();
+        return  redirect()->route('login')->with('succ','login as buyer');
+
+    }
    $aminities= Amenity::latest()->get();
-    return view('units.create',compact('aminities'));
+   $governorates= Governorate::all();
+    return view('units.create',compact('aminities','governorates'));
 }
 
 
 
 public function Save(Request $request){
+
     if ($request->file('unit_main_photo')){
         $file = $request->file('unit_main_photo');
         $fileName = date('YmdHi').$file->getClientOriginalName();
@@ -53,16 +67,6 @@ public function Save(Request $request){
 
     }
     else{$fileName='';}
-
-
-
-
-
-
-
-
-
-
     if(Auth::user()){
         $user_id=Auth::user()->id;}
         else{$user_id=0;}
@@ -74,6 +78,7 @@ public function Save(Request $request){
         'area'=>$request->area ,
         'details'=>$request->details ,
         'price'=>$request->price ,
+        'district_id'=>$request->district_id,
         'payment_type'=>$request->payment_type ,
         'building_date'=>$request->building_date ,
         'delevery_date'=>$request->delevery_date ,
@@ -202,7 +207,7 @@ public function saveMessage(Request $request){
         'messageDetails'=>$request->messageDetails,
         'phone'=>$request->phone
     ]);
-    return redirect()->back()->with('succ',"message sent Successfully");;
+    return redirect()->back()->with('succ',"message sent Successfully");
 }
 
 
@@ -229,14 +234,16 @@ public function MyMessages($id){
 public function search(Request $request){
 
     if($request->type != null){
-         $units = DB::table('units')->whereBetween('area', [$request->minimumArea, $request->maximumArea])->
+         $units = Unit::whereBetween('area', [$request->minimumArea, $request->maximumArea])->
                                       whereBetween('price', [$request->minimumPrice, $request->maximumPrice])->
                                       wherein('type',$request->type)->paginate(10);
          }
     else {
-    $units = DB::table('units')->whereBetween('area', [$request->minimumArea, $request->maximumArea])->
-                                 whereBetween('price', [$request->minimumPrice, $request->maximumPrice])->paginate(10);;
-        }
+
+    $units = Unit::whereBetween('area', [$request->minimumArea, $request->maximumArea])->
+                                 whereBetween('price', [$request->minimumPrice, $request->maximumPrice])->paginate(10);
+
+                                }
     $types=Unit::DISTINCT()->get('type');
     $minimumPrice=Unit::whereNotNull('price')->min('price');
     $maximumPrice=Unit::whereNotNull('price')->max('price');

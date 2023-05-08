@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->integer('userType')->default(0);
+            $table->text('briefInfo');
+
         });
     }
 

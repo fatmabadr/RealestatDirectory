@@ -11,8 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->integer('userType')->default(0);
+        Schema::table('units', function (Blueprint $table) {
+            $table->integer('district_id');
+
         });
     }
 
@@ -21,7 +22,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
+        Schema::table('units', function (Blueprint $table) {
             //
         });
     }
