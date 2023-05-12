@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\mail;
 use App\Models\Unit;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Amenity;
 use App\Models\District;
@@ -27,7 +28,7 @@ public function ViewAll(){
         $maximumprice=Unit::whereNotNull('price')->max('price');
         $minimumArea=Unit::whereNotNull('area')->min('area');
         $maximumArea=Unit::whereNotNull('area')->max('area');
-        $units=Unit::latest()->paginate(10);
+        $units=Unit::latest()->paginate(9);
        // $unitsdistrict=District::where('district_id',$units->$id)->get('name');
 
         $types=Unit::DISTINCT()->get('type');
@@ -38,18 +39,18 @@ public function ViewAll(){
 
 public function ViewUnit($id){
     $unit=Unit::find($id);
+    $SellerInfo=User::where('id',$unit->user_id)->get();
     $multiImages=Unit_multiImages::where('unit_id',$id)->get();
     $views= Redis::incr('unit'.$id);
 
-    return view('units.view',compact('unit','multiImages','views'));
+    return view('units.view',compact('unit','multiImages','views','SellerInfo'));
 }
 
 
 public function create(){
     if(Auth::user()->userType==0){
      Auth::logout();
-        return  redirect()->route('login')->with('succ','login as buyer');
-
+        return  redirect()->route('login')->with('succ','Register as a seller');
     }
    $aminities= Amenity::latest()->get();
    $governorates= Governorate::all();

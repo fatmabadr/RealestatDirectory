@@ -74,8 +74,10 @@ route::get('/getAllCities/Governorate/{governorate_id}', [AreaController::class,
 route::get('/getAlldistrict/district/{city_id}', [AreaController::class,'getalldistrictofcity']);
 
 
-Route::get('login', [AuthenticatedSessionController::class, 'create'])->name('login');
-Route::get('logout', [AuthenticatedSessionController::class, 'destroy'])
-->name('logout');
+//Route::get('login', [AuthenticatedSessionController::class, 'create'])->name('login');
+//Route::post('lofgin', [AuthenticatedSessionController::class, 'store'])->name('logitn');
+
+// Route::get('logout', [AuthenticatedSessionController::class, 'destroy'])
+// ->name('logout');
 route::get('profile',[ProfileController::class,'edit'])->name('profile.edit');
 Route::get('delete/', [ProfileController::class, 'deleteProfileImage'])->name('delete.profile.image');

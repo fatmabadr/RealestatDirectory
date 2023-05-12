@@ -7,6 +7,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Maestroerror\HeicToJpg;
 use Illuminate\View\View;
 use Image;
 
@@ -33,12 +34,14 @@ class ProfileController extends Controller
         if ($request->user()->isDirty('email')) {
             $request->user()->email_verified_at = null;
         }
+       Auth::user()->facebookLink=$request->facebookLink;
+       Auth::user()->whatsappLink=$request->whatsappLink;
+       Auth::user()->phoneNmuber=$request->phoneNmuber;
        Auth::user()->briefInfo=$request->briefInfo;
-
        if ($request->file('profileImage')){
-        $file = $request->file('profileImage');
-        $fileName =date('YmdHi').$file->getClientOriginalName();
-        Image::make($request->file('profileImage'))->resize(1200,1200)->save(('profileImages/').$fileName);
+       $file = $request->file('profileImage');
+       $fileName =date('YmdHi').$file->getClientOriginalName();
+       Image::make($request->file('profileImage'))->resize(1200,1200)->save(('profileImages/').$fileName);
         Auth::user()->profileImage=$fileName;
   }
   else{Auth::user()->profileImage="defultprofileImage";}

@@ -78,41 +78,60 @@ style="background-image: url('/unitImages/{{$unit->mainimage}}')"
 
         {{$unit->details}}
        </p>
-
+       @foreach ($SellerInfo as $SellerInfo )
       <div class="d-block agent-box p-5">
         <div class="img mb-4">
           <img
-            src="images/person_2-min.jpg"
+         {{!empty(Auth::guard('web')->user()->photoDirectory)?Auth::guard('web')->user()->photoDirectory :'noimage.jpg'}}"
+
+            src="/profileImages/{{!empty($SellerInfo->profileImage)?$SellerInfo->profileImage:'defultprofileImage.jpg'}}"
             alt="Image"
             class="img-fluid"
           />
         </div>
+
+
+
         <div class="text">
-          <h3 class="mb-0">Alicia Huston</h3>
-          <div class="meta mb-3">Real Estate</div>
+          <h3 class="mb-0">{{$SellerInfo->name}}</h3>
+
           <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            Ratione laborum quo quos omnis sed magnam id ducimus saepe
+         {{$SellerInfo->briefInfo}}
           </p>
+
           <ul class="list-unstyled social dark-hover d-flex">
+          @if  (!empty($SellerInfo->phoneNumber))
             <li class="me-1">
-              <a href="#"><span class="icon-instagram"></span></a>
+              <a href="tel://{{$SellerInfo->phoneNumber}}"><span class="icon-phone"></span></a>
             </li>
+            @endif
+            @if  (!empty($SellerInfo->facebookLink))
             <li class="me-1">
-              <a href="#"><span class="icon-twitter"></span></a>
+              <a href="{{$SellerInfo->facebookLink}}"><span class="icon-facebook"></span></a>
             </li>
+            @endif
+            @if  (!empty($SellerInfo->whatsappLink))
             <li class="me-1">
-              <a href="#"><span class="icon-facebook"></span></a>
+              <a href="{{$SellerInfo->whatsappLink}}"><span class="icon-whatsapp"></span></a>
             </li>
-            <li class="me-1">
-              <a href="#"><span class="icon-linkedin"></span></a>
-            </li>
+            @endif
           </ul>
         </div>
       </div>
+      @endforeach
 
 
       {{-- //send a message --}}
+
+@if(Auth::user()->id== $unit->user_id)
+
+
+
+
+number of visitors {{$views}}
+
+
+@else
       <div class="d-block agent-box p-5">
 
         <div class="text">
@@ -139,6 +158,7 @@ style="background-image: url('/unitImages/{{$unit->mainimage}}')"
 
         </div>
       </div>
+      @endif
     </div>
   </div>
 </div>

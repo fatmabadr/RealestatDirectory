@@ -46,41 +46,34 @@
                     class="js-clone-nav d-none d-lg-inline-block text-start site-menu float-end"
                   >
                     <li class="active"><a href="{{route('unit.home.page')}}">Home</a></li>
-                    <li class="has-children">
-                      <a href="properties.html">Properties</a>
-                      <ul class="dropdown">
-                        <li><a href="#">Buy Property</a></li>
-                        <li><a href="{{route('unit.create')}}">Sell Property</a></li>
-                        <li class="has-children">
-                          <a href="#">Dropdown</a>
-                          <ul class="dropdown">
-                            <li><a href="#">Sub Menu One</a></li>
-                            <li><a href="#">Sub Menu Two</a></li>
-                            <li><a href="#">Sub Menu Three</a></li>
-                          </ul>
-                        </li>
-                      </ul>
+                    <li class="active">
+                      <a href="{{route('unit.create')}}"> Sell Property</a>
+
                     </li>
 
-                    <li><a href="services.html">Services</a></li>
-                    <li><a href="about.html">About</a></li>
-                    <li><a href="contact.html">Contact Us</a></li>
+
                     @if (!Auth::user())
-                    <li><a href="{{route('login')}}">Login</a></li>
+                    <li class="active"><a href="{{route('login')}}">Login</a></li>
                     @else
-                    <li><a href="{{route('profile.edit')}}">Profile</a></li>
-                    <li><a href="{{route('logout')}}">Logout</a></li>
+                    <li class="active"><a href="{{route('profile.edit')}}">Profile</a></li>
+
+                    <li class="active">  <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit">Logout</button>
+                      </form>
+                    </li>
+                    @if (Auth::user()->userType==1)
+                    <li class="active"><a href="{{route('dashboard')}}">Dashboard</a></li>
+                   @endif
+
                      @endif
+
+
+
+
                   </ul>
 
-                  <a
-                    href="#"
-                    class="burger light me-auto float-end mt-1 site-menu-toggle js-menu-toggle d-inline-block d-lg-none"
-                    data-toggle="collapse"
-                    data-target="#main-navbar"
-                  >
-                    <span></span>
-                  </a>
+
                 </div>
               </div>
             </div>

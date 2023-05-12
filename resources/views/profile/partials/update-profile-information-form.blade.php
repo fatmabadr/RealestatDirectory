@@ -54,6 +54,8 @@
 
 
 
+@if (Auth::user()->userType==1)
+
 
  <div class="row mb-3">
      <label for="example-text-input" class="col-sm-2 col-form-label">Profile image</label>
@@ -82,11 +84,14 @@
 
  </div>
 
+Facebook Link  <input type="url" name="facebookLink"  value=""><br>
 
+ whatsapp Lonk  <input type="url" name="whatsappLink"  value=""><br>
 
-
+phoneNumber  <input type="tel" name="phoneNmuber"  value="">
+<br>
  brif Info  <textarea  name="briefInfo" rows="5" cols="15" value=""> </textarea>
-
+ @endif
 
 {{-- // --}}
 

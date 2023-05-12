@@ -22,38 +22,57 @@
 
 
 
+    <x-auth-session-status class="mb-4" :status="session('status')" />
 
 
-	<form method ="post" action =" {{route('login')}}"class="register-form outer-top-xs" role="form">
+	<form method ="post" action ="{{ route('login') }}"class="register-form outer-top-xs" >
         @csrf
         @if(Session::has('error'))
         <div class="alert alert-danger" role="alert">
            {{Session::get('error')}}
           </div>
         @endif
-		<div class="form-group">
-		    <label class="info-title" for="exampleInputEmail1">Email Address <span>*</span></label>
-		    <input type="email" name="email" class="form-control unicase-form-control text-input" id="exampleInputEmail1" >
-		</div>
 
 
-        <div class="form-group">
 
-        @if(Session::has('succ'))
-        <div class="alert alert-success" role="alert"  timer= "5000">
-            {{Session::get('succ')}} </div> @endif
+        <div>
+            <x-input-label for="email" :value="__('Email')" />
+            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
+            <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
-	  	<div class="form-group">
-		    <label class="info-title" for="exampleInputPassword1">Password <span>*</span></label>
-		    <input type="password" name="password" class="form-control unicase-form-control text-input" id="exampleInputPassword1" >
-		</div>
-		<div class="radio outer-xs">
 
-		  	<a href="" class="forgot-password pull-right">Forgot your Password?</a>
-		</div>
-	  	<button type="submit" class="btn-upper btn btn-primary checkout-page-button">Login</button>
+
+
+
+        <div class="mt-4">
+            <x-input-label for="password" :value="__('Password')" />
+
+            <x-text-input id="password" class="block mt-1 w-full"
+                            type="password"
+                            name="password"
+                            required autocomplete="current-password" />
+
+            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+        </div>
+
+
+        <div class="flex items-center justify-end mt-4">
+            @if (Route::has('password.request'))
+                <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('password.request') }}">
+                    {{ __('Forgot your password?') }}
+                </a>
+            @endif
+
+
+        </div>
+
+
+	  	<button type="submit" class="btn-upper btn btn-primary checkout-page-button"> loginn </button>
 	</form>
+
+
+
 </div>
 <!-- Sign-in -->
 
@@ -70,6 +89,9 @@
 	    	<label class="info-title" for="exampleInputEmail2">{{Session::get('error')}}</label>
 	  	</div>
         @endif
+        @if(Session::has('succ'))
+        <div class="alert alert-success" role="alert"  timer= "5000">
+            {{Session::get('succ')}} </div> @endif
         <div class="form-group">
 	    	<label class="info-title" for="exampleInputEmail2" ><h6>Email Address<span>*</span> </h6></label>
 	    	<input type="email"name ="email" class="form-control unicase-form-control text-input" id="exampleInputEmail2" >

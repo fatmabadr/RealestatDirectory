@@ -6,10 +6,11 @@
     </x-slot>
 
 
-
-<a href ="{{route('my.units',Auth::user()->id)}}">my units </a>
-<a href ="{{route('my.messages',Auth::user()->id)}}">my messages </a>
-
+    @if (Auth::user()->userType==1)
+<a href ="{{route('my.units',Auth::user()->id)}}">my units </a> <br>
+<a href ="{{route('my.messages',Auth::user()->id)}}">my messages </a><br>
+<a href="{{route('unit.create')}}"> add new Property</a>
+@endif
 
 
 

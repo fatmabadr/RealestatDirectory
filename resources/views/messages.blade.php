@@ -20,7 +20,11 @@ table, th, td {
   @foreach($messages as $message)
   <tr>
 
-    <td>{{$message->unit_id}}</td>
+    <td>
+        <a href="{{route('Unit.view',$message->unit_id)}}"
+        class="btn btn-primary py-2 px-3"
+        >  {{$message->unit_id}}</a>
+    </td>
     <td>{{$message->name}} </td>
     <td>{{$message->phone}}</td>
     <td>{{$message->messageDetails}}</td>
